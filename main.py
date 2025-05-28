@@ -29,13 +29,12 @@ def oblicz(wspolczynniki_k, ograniczenia_k_dolne, ograniczenia_k_gorne, funckja_
             wspolczynniki_funckji_celu = [-x for x in funckja_celu]
             result = linprog(c=wspolczynniki_funckji_celu, A_ub=wspolczynniki_funkcji_ograniczajacych,
                              b_ub=ograniczenia_funkcji,
-                             method='highs')
+                             method='simplex')
 
             if result.success:
                 print(f"Maksymalny zysk: {-result.fun} zł")
                 print(f"Liczba godzin dla A (x1): {result.x[0]}")
                 print(f"Liczba godzin dla B (x2): {result.x[1]}")
-                # print(f"Liczba godzin dla W1 (x1) i W2 (x2): {result2.x[0]} : {result2.x[1]}")
                 result_label.config(
                     text=f"Maksymalny zysk: {-result.fun} zł | (x1, x2): ({result.x[0]}, {result.x[1]})")
             else:
@@ -113,7 +112,7 @@ def window():
     window.title("Wybor parametrow")
     validate_command = window.register(validate_entry)
 
-    columns = ["wyrób/mąka", "Żytnia", "Przenna"]
+    columns = ["Ciasto/Mąka", "Żytnia", "Pszenna"]
     rows = ["A", "B"]
 
     frame = tk.Frame(window)
@@ -142,22 +141,15 @@ def window():
     entry_k2_w1.grid(row=1, column=2)
     entry_k2_w2 = tk.Entry(frame, **entry_params)
     entry_k2_w2.grid(row=2, column=2)
-    # entry_k3_w1 = tk.Entry(frame, **entry_params)
-    # entry_k3_w1.grid(row=1, column=3)
-    # entry_k3_w2 = tk.Entry(frame, **entry_params)
-    # entry_k3_w2.grid(row=2, column=3)
 
     entry_k1_w1.insert(0, '2')
     entry_k1_w2.insert(0, '3')
     entry_k2_w1.insert(0, '2')
-    entry_k2_w2.insert(0, '')
-    # entry_k3_w1.insert(0, '4')
-    # entry_k3_w2.insert(0, '1')
+    entry_k2_w2.insert(0, '0')
 
     entries = [
         [entry_k1_w1, entry_k1_w2],
         [entry_k2_w1, entry_k2_w2],
-        # [entry_k3_w1, entry_k3_w2]
     ]
 
     columns_k = ["Ograniczenia", "MIN", "MAX"]
@@ -182,17 +174,11 @@ def window():
     entry_k2_lower_bound.grid(row=2, column=1)
     entry_k2_upper_bound = tk.Entry(frame_k, **entry_params)
     entry_k2_upper_bound.grid(row=2, column=2)
-    # entry_k3_lower_bound = tk.Entry(frame_k, **entry_params)
-    # entry_k3_lower_bound.grid(row=3, column=1)
-    # entry_k3_upper_bound = tk.Entry(frame_k, **entry_params)
-    # entry_k3_upper_bound.grid(row=3, column=2)
 
     entry_k1_lower_bound.insert(0, '')
     entry_k1_upper_bound.insert(0, '12')
     entry_k2_lower_bound.insert(0, "")
     entry_k2_upper_bound.insert(0, '6')
-    # entry_k3_lower_bound.insert(0, '8')
-    # entry_k3_upper_bound.insert(0, '')
 
     entries_k_dolne = [entry_k1_lower_bound, entry_k2_lower_bound]
     entries_k_gorne = [entry_k1_upper_bound, entry_k2_upper_bound]
